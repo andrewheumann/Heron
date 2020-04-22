@@ -18,11 +18,6 @@ using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.Geometry;
 using Rhino.DocObjects;
-using Rhino.Collections;
-using GH_IO;
-using GH_IO.Serialization;
-using OSGeo.GDAL;
-using OSGeo.OSR;
 using OSGeo.OGR;
 
 
@@ -69,9 +64,9 @@ namespace Heron
 
             //int SRef = 3857;
 
-            OSGeo.OGR.Ogr.RegisterAll();
-            OSGeo.OGR.Driver drv = OSGeo.OGR.Ogr.GetDriverByName("ESRI Shapefile");
-            OSGeo.OGR.DataSource ds = OSGeo.OGR.Ogr.Open(shpFileLoc, 0);
+            Ogr.RegisterAll();
+            Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
+            DataSource ds = Ogr.Open(shpFileLoc, 0);
 
             List<OSGeo.OGR.Layer> layerset = new List<OSGeo.OGR.Layer>();
             List<int> fc = new List<int>();
@@ -83,7 +78,7 @@ namespace Heron
                 if (layer == null)
                 {
                     Console.WriteLine("FAILURE: Couldn't fetch advertised layer " + iLayer);
-                    System.Environment.Exit(-1);
+                    Environment.Exit(-1);
                 }
                 fc.Add((int)layer.GetFeatureCount(1));
                 layerset.Add(layer);
@@ -147,8 +142,8 @@ namespace Heron
                         revTransform.TransformPoint(minpT);
                         revTransform.TransformPoint(maxpT);
 
-                        OSGeo.OGR.Geometry bbox = OSGeo.OGR.Geometry.CreateFromWkt("POLYGON((" + min.X + " " + min.Y + ", " + min.X + " " + max.Y + ", " + max.X + " " + max.Y + ", " + max.X + " " + min.Y + ", " + min.X + " " + min.Y + "))");
-                        OSGeo.OGR.Geometry ebbox = OSGeo.OGR.Geometry.CreateFromWkt("POLYGON((" + minpT[0] + " " + minpT[1] + ", " + minpT[0] + " " + maxpT[1] + ", " + maxpT[0] + " " + maxpT[1] + ", " + maxpT[0] + " " + minpT[1] + ", " + minpT[0] + " " + minpT[1] + "))");
+                        OSGeo.OGR.Geometry bbox = Geometry.CreateFromWkt("POLYGON((" + min.X + " " + min.Y + ", " + min.X + " " + max.Y + ", " + max.X + " " + max.Y + ", " + max.X + " " + min.Y + ", " + min.X + " " + min.Y + "))");
+                        OSGeo.OGR.Geometry ebbox = Geometry.CreateFromWkt("POLYGON((" + minpT[0] + " " + minpT[1] + ", " + minpT[0] + " " + maxpT[1] + ", " + maxpT[0] + " " + maxpT[1] + ", " + maxpT[0] + " " + minpT[1] + ", " + minpT[0] + " " + minpT[1] + "))");
 
                         //Clip Shapefile
                         //http://pcjericks.github.io/py-gdalogr-cookbook/vector_layers.html
@@ -319,10 +314,10 @@ namespace Heron
         public static Point3d ConvertToWSG(Point3d xyz)
         {
             EarthAnchorPoint eap = new EarthAnchorPoint();
-            eap = Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint;
+            eap = RhinoDoc.ActiveDoc.EarthAnchorPoint;
             Rhino.UnitSystem us = new Rhino.UnitSystem();
             Transform xf = eap.GetModelToEarthTransform(us);
-            xyz = xyz * Rhino.RhinoMath.UnitScale(Rhino.RhinoDoc.ActiveDoc.ModelUnitSystem, UnitSystem.Meters);
+            xyz = xyz * RhinoMath.UnitScale(RhinoDoc.ActiveDoc.ModelUnitSystem, UnitSystem.Meters);
             Point3d ptON = new Point3d(xyz.X, xyz.Y, xyz.Z);
             ptON = xf * ptON;
             return ptON;
@@ -331,7 +326,7 @@ namespace Heron
         public static Point3d ConvertToXYZ(Point3d wsg)
         {
             EarthAnchorPoint eap = new EarthAnchorPoint();
-            eap = Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint;
+            eap = RhinoDoc.ActiveDoc.EarthAnchorPoint;
             Rhino.UnitSystem us = new Rhino.UnitSystem();
             Transform xf = eap.GetModelToEarthTransform(us);
 
@@ -340,7 +335,7 @@ namespace Heron
             Transform Inversexf = new Transform();
             xf.TryGetInverse(out Inversexf);
             Point3d ptMod = new Point3d(wsg.X, wsg.Y, wsg.Z);
-            ptMod = Inversexf * ptMod / Rhino.RhinoMath.UnitScale(Rhino.RhinoDoc.ActiveDoc.ModelUnitSystem, UnitSystem.Meters);
+            ptMod = Inversexf * ptMod / RhinoMath.UnitScale(RhinoDoc.ActiveDoc.ModelUnitSystem, UnitSystem.Meters);
             return ptMod;
         }
 

@@ -85,7 +85,7 @@ namespace Heron
                     Console.WriteLine("FAILURE: Couldn't fetch advertised layer " + iLayer);
                     System.Environment.Exit(-1);
                 }
-                fc.Add(layer.GetFeatureCount(1));
+                fc.Add((int)layer.GetFeatureCount(1));
                 layerset.Add(layer);
             }
 

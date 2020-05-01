@@ -62,14 +62,14 @@ namespace Heron
             string lonlatString = "";
 
             //check if EAP has been set and if so what is it
-            if (!Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint.EarthLocationIsSet())
+            if (!EarthAnchorPoint.EarthLocationIsSet())
             {
                 lonlatString = "The Earth Anchor Point has not been set yet";
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "EAP has not been set yet");
             }
 
-            else lonlatString = "Longitude: " + Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint.EarthBasepointLongitude.ToString() +
-                " / Latitude: " + Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint.EarthBasepointLatitude.ToString();
+            else lonlatString = "Longitude: " + EarthAnchorPoint.EarthBasepointLongitude.ToString() +
+                " / Latitude: " + EarthAnchorPoint.EarthBasepointLatitude.ToString();
 
             DA.GetData<bool>("Set EAP", ref EAP);
             DA.GetData<double>("Latitude", ref lat);
@@ -77,16 +77,16 @@ namespace Heron
 
             if (EAP == true)
             {
-                EarthAnchorPoint ePt = new EarthAnchorPoint();
-                ePt.EarthBasepointLatitude = lat;
-                ePt.EarthBasepointLongitude = lon;
-
                 //set new EAP
-                Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint = ePt;
+                EarthAnchorPoint = new EarthAnchorPoint()
+                {
+                    EarthBasepointLatitude = lat,
+                    EarthBasepointLongitude = lon
+                };
 
                 //new EAP to string for output
-                lonlatString = "Longitude: " + Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint.EarthBasepointLongitude.ToString() +
-                " / Latitude: " + Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint.EarthBasepointLatitude.ToString();
+                lonlatString = "Longitude: " + EarthAnchorPoint.EarthBasepointLongitude.ToString() +
+                " / Latitude: " + EarthAnchorPoint.EarthBasepointLatitude.ToString();
             }
 
 

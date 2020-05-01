@@ -30,8 +30,7 @@ namespace Heron
 
         public static Point3d ToWGS(Point3d xyz)
         {
-            EarthAnchorPoint eap = new EarthAnchorPoint();
-            eap = Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint;
+            EarthAnchorPoint eap = HeronComponent.EarthAnchorPoint;
             Rhino.UnitSystem us = new Rhino.UnitSystem();
             Transform xf = eap.GetModelToEarthTransform(us);
 
@@ -46,7 +45,7 @@ namespace Heron
 
         public static Transform ToWGSxf()
         {
-            EarthAnchorPoint eap = Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint;
+            EarthAnchorPoint eap = HeronComponent.EarthAnchorPoint;
             Rhino.UnitSystem us = new Rhino.UnitSystem();
             Transform xf = eap.GetModelToEarthTransform(us);
 
@@ -61,8 +60,7 @@ namespace Heron
 
             ///TODO: make translation of wgs here using SetCRS (CRS -> WGS84)
 
-            EarthAnchorPoint eap = new EarthAnchorPoint();
-            eap = Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint;
+            EarthAnchorPoint eap = HeronComponent.EarthAnchorPoint;
             Rhino.UnitSystem us = new Rhino.UnitSystem();
             Transform xf = eap.GetModelToEarthTransform(us);
 
@@ -77,8 +75,7 @@ namespace Heron
 
         public static Transform ToXYZxf()
         {
-            EarthAnchorPoint eap = new EarthAnchorPoint();
-            eap = Rhino.RhinoDoc.ActiveDoc.EarthAnchorPoint;
+            EarthAnchorPoint eap = HeronComponent.EarthAnchorPoint;
             Rhino.UnitSystem us = new Rhino.UnitSystem();
             Transform xf = eap.GetModelToEarthTransform(us);
 
